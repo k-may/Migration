@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<institutions>
+	<institution name="">
+		<latitude></latitude>
+		<inst_start_date></inst_start_date>
+		<inst_end_date></inst_end_date>
+		<curators>
+			<curator name ="">
+				<cur_first_name>
+				</cur_first_name>
+				<cur_last_name>
+				</cur_last_name>
+				<pos_start_date></pos_start_date>
+				<pos_end_date></pos_end_date>
+			</curator>
+		</curators>
+		<directors>
+			<director name ="">
+				<dir_first_name>
+				</dir_first_name>
+				<dir_last_name>
+				</dir_last_name>
+				<pos_start_date></pos_start_date>
+				<pos_end_date></pos_end_date>
+			</director>
+		</directors>
+	</institution>
+</institutions>
