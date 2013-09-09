@@ -36,12 +36,11 @@
 		private var _scrollRight:ScrollWall;
 
 		//padding			
-		var nodeBorderExtents:int=410;
-		var mainNodeSize:int=25;
+		//var mainNodeSize:int=25;
 
-		var gutter:int=40;
-		var column:int=120;
-		var mainW:int;
+		//var gutter:int=40;
+		//var column:int=120;
+		var _menuWidth:int;
 
 		//textfields
 		var topTitle:TextField=new TextField();
@@ -52,39 +51,93 @@
 
 		private var myFont:Font;
 
-		var titleCont:Sprite=new Sprite();
-		var titleMask:Shape=new Shape();
+		private var titleCont:Sprite=new Sprite();
+		private var titleMask:Shape=new Shape();
 
-		var scrollDir:int;
+		private var _scrollDir:int;
 
 		public function Container(_h:int, _nodesYPos:int, nodeSize:int, _gutter:int, _column:int)
 		{
 			//trace("hello from Controller");
 
 			this.h=Migration.STAGE_HEIGHT;
-			this.gutter=Migration.GUTTER_WIDTH;
-			this.column=Migration.COLUMN_WIDTH;
+			//this.gutter=Migration.GUTTER_WIDTH;
+			//this.column=Migration.COLUMN_WIDTH;
 			this.nodesYPos=Migration.NODES_PADDING_TOP;
 
-			mainW=column + gutter;
+			_menuWidth=Migration.COLUMN_WIDTH + Migration.GUTTER_WIDTH;
 
 			_nodesContainer=new NodeController(nodesYPos, h, nodeSize);
 			_nodeBorder=new Border(0.25);
 
-			menuContainer=new MenuController(h - 20, mainNodeSize);
+			menuContainer=new MenuController(h - 20, Migration.MAIN_NODE_SIZE);
 			_subMenuBorder=new Border(0.25);
 
 		}
 
 		public function render()
 		{
+			createChilds();
+			createTextFields();
+			
+			addEventListener(Event.ENTER_FRAME, fadeInst);
+		}
+		
+		private function createTextFields(){
+			tFormat=new TextFormat(myFont.fontName, 13, 0X7E7F81);
+			
+			//titleCont.graphics.lineStyle(1,0X000fff);
+			titleCont.graphics.drawRect(0, 0, _menuWidth, h);
+			addChild(titleCont);
+			titleCont.x=w;
+			titleCont.y=10;
+			titleMask.graphics.lineStyle(1, 0X000fff);
+			titleMask.graphics.beginFill(0, 0);
+			titleMask.graphics.drawRect(0, 0, _menuWidth - 40, h);
+			addChild(titleMask);
+			titleMask.x=w - _menuWidth;
+			titleCont.mask=titleMask
+			
+			topTitle.embedFonts=true;
+			topTitle.defaultTextFormat=tFormat;
+			topTitle.setTextFormat(tFormat);
+			topTitle.selectable=false;
+			topTitle.autoSize="left";
+			topTitle.x=10;
+			topTitle.y=5;
+			titleCont.addChild(topTitle);
+			
+			bottomTitle.embedFonts=true;
+			bottomTitle.defaultTextFormat=tFormat;
+			bottomTitle.setTextFormat(tFormat);
+			bottomTitle.selectable=false;
+			bottomTitle.autoSize="left";
+			bottomTitle.x=10;
+			bottomTitle.y=h - 43;
+			titleCont.addChild(bottomTitle);
+			
+			var sFormat:TextFormat=new TextFormat(myFont.fontName, 11, 0);
+			instTitle.embedFonts=true;
+			instTitle.defaultTextFormat=sFormat;
+			instTitle.setTextFormat(sFormat);
+			instTitle.selectable=false;
+			instTitle.mouseEnabled=false;
+			instTitle.autoSize="left";
+			instTitle.text="Select arrows to access filter and scroll window"
+			instTitle.x=0;
+			instTitle.y=280;
+			instTitle.rotation=-90;
+			
+		}
+		
+		private function createChilds(){
 			addChild(instTitle);
 
 			addChild(menuContainer);
 
 			menuContainer.y=10;
 			menuContainer.addEventListener(MenuEvent.EXPAND_MAIN_MENU, mainMenuHandler);
-			menuContainer.mainMaskXPos=Math.floor(mainNodeSize / 2);
+			menuContainer.mainMaskXPos=Math.floor(Migration.MAIN_NODE_SIZE / 2);
 			menuContainer.addEventListener(MenuEvent.OVER_NAME, overName);
 			menuContainer.addEventListener(MenuEvent.CLICK_NAME, clickName);
 
@@ -106,66 +159,18 @@
 			_scrollRight.addEventListener(ScrollEvent.OVER_ARROW, overArrow);
 
 			addChild(_subMenuBorder);
-			_subMenuBorder.x=gutter + column;
-			_subMenuBorder.y=_nodeBorder.y;
+			_subMenuBorder.x = _menuWidth;
+			_subMenuBorder.y = _nodeBorder.y;
 			_subMenuBorder.render(0, h - 20);
 			_subMenuBorder.visible=false;
-
-			tFormat=new TextFormat(myFont.fontName, 13, 0X7E7F81);
-
-			//titleCont.graphics.lineStyle(1,0X000fff);
-			titleCont.graphics.drawRect(0, 0, mainW, h);
-			addChild(titleCont);
-			titleCont.x=w;
-			titleCont.y=10;
-			titleMask.graphics.lineStyle(1, 0X000fff);
-			titleMask.graphics.beginFill(0, 0);
-			titleMask.graphics.drawRect(0, 0, mainW - 40, h);
-			addChild(titleMask);
-			titleMask.x=w - mainW;
-			titleCont.mask=titleMask
-
-			topTitle.embedFonts=true;
-			topTitle.defaultTextFormat=tFormat;
-			topTitle.setTextFormat(tFormat);
-			topTitle.selectable=false;
-			topTitle.autoSize="left";
-			topTitle.x=10;
-			topTitle.y=5;
-			titleCont.addChild(topTitle);
-
-			bottomTitle.embedFonts=true;
-			bottomTitle.defaultTextFormat=tFormat;
-			bottomTitle.setTextFormat(tFormat);
-			bottomTitle.selectable=false;
-			bottomTitle.autoSize="left";
-			bottomTitle.x=10;
-			bottomTitle.y=h - 43;
-			titleCont.addChild(bottomTitle);
-
-			var sFormat:TextFormat=new TextFormat(myFont.fontName, 11, 0);
-			instTitle.embedFonts=true;
-			instTitle.defaultTextFormat=sFormat;
-			instTitle.setTextFormat(sFormat);
-			instTitle.selectable=false;
-			instTitle.mouseEnabled=false;
-			instTitle.autoSize="left";
-			instTitle.text="Select arrows to access filter and scroll window"
-			instTitle.x=0;
-			instTitle.y=280;
-			instTitle.rotation=-90;
-
-			addEventListener(Event.ENTER_FRAME, fadeInst);
 		}
 
 		private function fadeInst(e:Event)
 		{
 			instTitle.alpha=(instTitle.alpha > 0.1) ? instTitle.alpha * 0.999 : 0;
+
 			if (instTitle.alpha == 0)
-			{
 				addEventListener(Event.ENTER_FRAME, fadeInst);
-					//removeChild(instTitle);
-			}
 		}
 
 		private function overName(e:Event)
@@ -391,22 +396,22 @@
 
 		private function expandSortMenu(e:Event)
 		{
-			menuContainer.subMenuMaskXPos=(menuContainer.subMenuMaskXPos < mainW - 50) ? menuContainer.subMenuMaskXPos * 1.3 + 10 : mainW - 15;
-			menuContainer.listMaskXPos=menuContainer.subMenuMaskXPos + mainW * 2 + 40
+			menuContainer.subMenuMaskXPos=(menuContainer.subMenuMaskXPos < _menuWidth - 50) ? menuContainer.subMenuMaskXPos * 1.3 + 10 : _menuWidth - 15;
+			menuContainer.listMaskXPos=menuContainer.subMenuMaskXPos + _menuWidth * 2 + 40
 
 			if (_subMenuBorder.visible)
 			{
 				_subMenuBorder.x=menuContainer.listMaskXPos - 200;
-				_subMenuBorder.render(_nodeBorder.x - _subMenuBorder.x - gutter, h - 20);
+				_subMenuBorder.render(_nodeBorder.x - _subMenuBorder.x - Migration.GUTTER_WIDTH, h - 20);
 			}
 			else
 			{
-				_nodeBorder.x=(_subMenuBorder.visible) ? _nodeBorder.x : menuContainer.subMenuMaskXPos + mainW + 15;
-				_nodeBorder.render(w - (menuContainer.subMenuMaskXPos + mainW + 15) - 30, h - 20);
+				_nodeBorder.x=(_subMenuBorder.visible) ? _nodeBorder.x : menuContainer.subMenuMaskXPos + _menuWidth + 15;
+				_nodeBorder.render(w - (menuContainer.subMenuMaskXPos + _menuWidth + 15) - 30, h - 20);
 				_nodesContainer.border(_nodeBorder.x + 15, 10, _nodeBorder._w - 30, h - 20);
-				_scrollLeft.x=menuContainer.subMenuMaskXPos + mainW - 10;
+				_scrollLeft.x=menuContainer.subMenuMaskXPos + _menuWidth - 10;
 			}
-			if (menuContainer.subMenuMaskXPos == mainW - 15)
+			if (menuContainer.subMenuMaskXPos == _menuWidth - 15)
 			{
 				removeEventListener(Event.ENTER_FRAME, expandSortMenu);
 					//menuController.addEventListener(MenuEvent.SORT_LIST, sortList);
@@ -415,21 +420,21 @@
 
 		private function collapseSortMenu(e:Event)
 		{
-			menuContainer.subMenuMaskXPos=(menuContainer.subMenuMaskXPos > menuContainer.mainMaskXPos - mainW + 40) ? menuContainer.subMenuMaskXPos * 0.7 - 15 : menuContainer.mainMaskXPos - mainW;
-			menuContainer.listMaskXPos=menuContainer.subMenuMaskXPos + mainW * 2 + 40;
+			menuContainer.subMenuMaskXPos=(menuContainer.subMenuMaskXPos > menuContainer.mainMaskXPos - _menuWidth + 40) ? menuContainer.subMenuMaskXPos * 0.7 - 15 : menuContainer.mainMaskXPos - _menuWidth;
+			menuContainer.listMaskXPos=menuContainer.subMenuMaskXPos + _menuWidth * 2 + 40;
 			if (_subMenuBorder.visible)
 			{
 				_subMenuBorder.x=menuContainer.listMaskXPos - 200;
-				_subMenuBorder.render(_nodeBorder.x - _subMenuBorder.x - gutter, h - 20);
+				_subMenuBorder.render(_nodeBorder.x - _subMenuBorder.x - Migration.GUTTER_WIDTH, h - 20);
 			}
 			else
 			{
-				_nodeBorder.x=(_subMenuBorder.visible) ? _nodeBorder.x : menuContainer.subMenuMaskXPos + mainW + 15;
-				_nodeBorder.render(w - (menuContainer.subMenuMaskXPos + mainW + 15) - 30, h - 20);
+				_nodeBorder.x=(_subMenuBorder.visible) ? _nodeBorder.x : menuContainer.subMenuMaskXPos + _menuWidth + 15;
+				_nodeBorder.render(w - (menuContainer.subMenuMaskXPos + _menuWidth + 15) - 30, h - 20);
 				_nodesContainer.border(_nodeBorder.x + 15, 10, _nodeBorder._w - 30, h - 20);
-				_scrollLeft.x=menuContainer.subMenuMaskXPos + mainW - 10;
+				_scrollLeft.x=menuContainer.subMenuMaskXPos + _menuWidth - 10;
 			}
-			if (menuContainer.subMenuMaskXPos == menuContainer.mainMaskXPos - mainW)
+			if (menuContainer.subMenuMaskXPos == menuContainer.mainMaskXPos - _menuWidth)
 			{
 				removeEventListener(Event.ENTER_FRAME, collapseSortMenu);
 					//menuController.removeEventListener(MenuEvent.SORT_LIST, sortList);
@@ -440,14 +445,14 @@
 
 		private function expandMainMenu(e:Event)
 		{
-			menuContainer.mainMaskXPos=(menuContainer.mainMaskXPos < gutter + column - 30) ? menuContainer.mainMaskXPos * 1.2 + 5 : (gutter + column - 15);
+			menuContainer.mainMaskXPos=(menuContainer.mainMaskXPos < _menuWidth - 30) ? menuContainer.mainMaskXPos * 1.2 + 5 : (_menuWidth - 15);
 			_nodeBorder.x=menuContainer.mainMaskXPos + 15;
 			_nodeBorder.render(w - (menuContainer.mainMaskXPos + 15) - 30, h - 20);
 			_nodesContainer.border(_nodeBorder.x + 15, 10, _nodeBorder._w - 30, h - 20);
 			menuContainer.filterMaskXPos=_nodeBorder.x - menuContainer._mainW;
 			_scrollLeft.x=menuContainer.mainMaskXPos - 10;
 			_nodesContainer._nodeXPos+=5;
-			if (menuContainer.mainMaskXPos == gutter + column - 15)
+			if (menuContainer.mainMaskXPos == _menuWidth - 15)
 			{
 				removeEventListener(Event.ENTER_FRAME, expandMainMenu);
 
@@ -471,20 +476,20 @@
 
 		private function expandSubMenu(e:Event)
 		{
-			_nodeBorder.x=(_nodeBorder.x < (gutter * 4 + column * 2) - 10) ? _nodeBorder.x + 10 : (gutter * 4 + column * 2);
+			_nodeBorder.x=(_nodeBorder.x < (Migration.GUTTER_WIDTH * 4 + Migration.COLUMN_WIDTH * 2) - 10) ? _nodeBorder.x + 10 : (Migration.GUTTER_WIDTH * 4 + Migration.COLUMN_WIDTH * 2);
 			_nodeBorder.render(w - _nodeBorder.x - 30, h - 20);
 			_nodesContainer.border(_nodeBorder.x + 15, 10, _nodeBorder._w - 30, h - 20);
-			menuContainer.listMaskXPos=_nodeBorder.x - gutter - 15; //equal to mainW?
+			menuContainer.listMaskXPos=_nodeBorder.x - Migration.GUTTER_WIDTH - 15; //equal to mainW?
 
 
-			if (_nodeBorder.x > gutter * 2 + column)
+			if (_nodeBorder.x > Migration.GUTTER_WIDTH * 2 + Migration.COLUMN_WIDTH)
 			{
 				_subMenuBorder.visible=true;
-				_subMenuBorder.render(_nodeBorder.x - _subMenuBorder.x - gutter, h - 20);
+				_subMenuBorder.render(_nodeBorder.x - _subMenuBorder.x - Migration.GUTTER_WIDTH, h - 20);
 			}
 			_scrollLeft.x=_nodeBorder.x - 25;
 			_nodesContainer._nodeXPos+=10;
-			if (_nodeBorder.x == (gutter * 4 + column * 2))
+			if (_nodeBorder.x == (Migration.GUTTER_WIDTH * 4 + Migration.COLUMN_WIDTH * 2))
 			{
 				removeEventListener(Event.ENTER_FRAME, expandSubMenu);
 			}
@@ -492,15 +497,15 @@
 
 		private function collapseSubMenu(e:Event)
 		{
-			_nodeBorder.x=(_nodeBorder.x > gutter + column + 10) ? _nodeBorder.x - 10 : (gutter + column);
+			_nodeBorder.x=(_nodeBorder.x > _menuWidth + 10) ? _nodeBorder.x - 10 : _menuWidth;
 			_nodeBorder.render(w - _nodeBorder.x - 30, h - 20);
 			_nodesContainer.border(_nodeBorder.x + 15, 10, _nodeBorder._w - 30, h - 20);
-			menuContainer.listMaskXPos=_nodeBorder.x - gutter - 15;
+			menuContainer.listMaskXPos=_nodeBorder.x - Migration.GUTTER_WIDTH - 15;
 
-			if (_nodeBorder.x - gutter > _subMenuBorder.x)
+			if (_nodeBorder.x - Migration.GUTTER_WIDTH > _subMenuBorder.x)
 			{
 
-				_subMenuBorder.render(_nodeBorder.x - _subMenuBorder.x - gutter, h - 20);
+				_subMenuBorder.render(_nodeBorder.x - _subMenuBorder.x - Migration.GUTTER_WIDTH, h - 20);
 			}
 			else
 			{
@@ -509,7 +514,7 @@
 			}
 			_scrollLeft.x=_nodeBorder.x - 25;
 			_nodesContainer._nodeXPos-=10;
-			if (_nodeBorder.x == gutter + column)
+			if (_nodeBorder.x == _menuWidth)
 			{
 				removeEventListener(Event.ENTER_FRAME, collapseSubMenu);
 			}
@@ -519,7 +524,7 @@
 		{
 			e.target.addEventListener(ScrollEvent.OUT_ARROW, outArrow);
 			e.target._arrowColor=0XDDFFF8;
-			scrollDir=-e.dir;
+			_scrollDir=-e.dir;
 			addEventListener(Event.ENTER_FRAME, scrollNodes);
 		}
 
@@ -533,9 +538,9 @@
 
 		private function scrollNodes(e:Event)
 		{
-			if (_nodesContainer._nodeXPos + (scrollDir * scrollSpeed) <= _nodeBorder.x + 300 && _nodesContainer._nodeXPos + (scrollDir * scrollSpeed) > (_nodesWidth - (w + 300)))
+			if (_nodesContainer._nodeXPos + (_scrollDir * scrollSpeed) <= _nodeBorder.x + 300 && _nodesContainer._nodeXPos + (_scrollDir * scrollSpeed) > (_nodesWidth - (w + 300)))
 			{
-				_nodesContainer._nodeXPos+=scrollDir * scrollSpeed;
+				_nodesContainer._nodeXPos+=_scrollDir * scrollSpeed;
 			}
 			if (scrollSpeed < 10)
 			{
