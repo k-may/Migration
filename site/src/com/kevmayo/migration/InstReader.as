@@ -37,7 +37,7 @@
 
 			for (var i:int=0; i<nodeNum; i++) {//go through every inst
 				var listXML:XML=list.institutions[i];
-				listObject=new InstObject  ;
+				var listObject:InstObject=new InstObject  ;
 				listObject.latitude=listXML.inst_lat;
 				listObject.name=listXML.inst_name;
 				listObject.startDate=listXML.inst_start_date;

@@ -22,24 +22,20 @@
 		private var _positionList:Array;
 		private var _instList:Array;
 
-		private var w, h:int;
+		private var w, height:int;
 
 		var scrollSpeed:Number=1;
 		var accel:Number=1.1;
 
 		//childs
-		var menuContainer:MenuController;
-		private var _nodesContainer:NodeController;
+		var menuContainer:MenuContainer;
+		private var _nodesContainer:NodeContainer;
 		private var _nodeBorder:Border;
 		private var _subMenuBorder:Border;
 		private var _scrollLeft:ScrollWall;
 		private var _scrollRight:ScrollWall;
 
 		//padding			
-		//var mainNodeSize:int=25;
-
-		//var gutter:int=40;
-		//var column:int=120;
 		var _menuWidth:int;
 
 		//textfields
@@ -58,19 +54,15 @@
 
 		public function Container(_h:int, _nodesYPos:int, nodeSize:int, _gutter:int, _column:int)
 		{
-			//trace("hello from Controller");
-
-			this.h=Migration.STAGE_HEIGHT;
-			//this.gutter=Migration.GUTTER_WIDTH;
-			//this.column=Migration.COLUMN_WIDTH;
+			this.height=Migration.STAGE_HEIGHT;
 			this.nodesYPos=Migration.NODES_PADDING_TOP;
 
 			_menuWidth=Migration.COLUMN_WIDTH + Migration.GUTTER_WIDTH;
 
-			_nodesContainer=new NodeController(nodesYPos, h, nodeSize);
+			_nodesContainer=new NodeContainer(nodesYPos, height, nodeSize);
 			_nodeBorder=new Border(0.25);
 
-			menuContainer=new MenuController(h - 20, Migration.MAIN_NODE_SIZE);
+			menuContainer=new MenuContainer(height - 20, Migration.MAIN_NODE_SIZE);
 			_subMenuBorder=new Border(0.25);
 
 		}
@@ -87,13 +79,13 @@
 			tFormat=new TextFormat(myFont.fontName, 13, 0X7E7F81);
 			
 			//titleCont.graphics.lineStyle(1,0X000fff);
-			titleCont.graphics.drawRect(0, 0, _menuWidth, h);
+			titleCont.graphics.drawRect(0, 0, _menuWidth, height);
 			addChild(titleCont);
 			titleCont.x=w;
 			titleCont.y=10;
 			titleMask.graphics.lineStyle(1, 0X000fff);
 			titleMask.graphics.beginFill(0, 0);
-			titleMask.graphics.drawRect(0, 0, _menuWidth - 40, h);
+			titleMask.graphics.drawRect(0, 0, _menuWidth - 40, height);
 			addChild(titleMask);
 			titleMask.x=w - _menuWidth;
 			titleCont.mask=titleMask
@@ -113,7 +105,7 @@
 			bottomTitle.selectable=false;
 			bottomTitle.autoSize="left";
 			bottomTitle.x=10;
-			bottomTitle.y=h - 43;
+			bottomTitle.y=height - 43;
 			titleCont.addChild(bottomTitle);
 			
 			var sFormat:TextFormat=new TextFormat(myFont.fontName, 11, 0);
@@ -147,8 +139,8 @@
 			
 			_nodeBorder.x=30;
 			_nodeBorder.y=10;
-			_nodeBorder.render(w - 60, h - 20);
-			_nodesContainer.border(_nodeBorder.x + 15, 10, _nodeBorder._w - 30, h - 20);
+			_nodeBorder.render(w - 60, height - 20);
+			_nodesContainer.border(_nodeBorder.x + 15, 10, _nodeBorder._w - 30, height - 20);
 
 			_scrollLeft=new ScrollWall("left", 12, nodesYPos - 117);
 			addChild(_scrollLeft);
@@ -161,7 +153,7 @@
 			addChild(_subMenuBorder);
 			_subMenuBorder.x = _menuWidth;
 			_subMenuBorder.y = _nodeBorder.y;
-			_subMenuBorder.render(0, h - 20);
+			_subMenuBorder.render(0, height - 20);
 			_subMenuBorder.visible=false;
 		}
 
@@ -402,13 +394,13 @@
 			if (_subMenuBorder.visible)
 			{
 				_subMenuBorder.x=menuContainer.listMaskXPos - 200;
-				_subMenuBorder.render(_nodeBorder.x - _subMenuBorder.x - Migration.GUTTER_WIDTH, h - 20);
+				_subMenuBorder.render(_nodeBorder.x - _subMenuBorder.x - Migration.GUTTER_WIDTH, height - 20);
 			}
 			else
 			{
 				_nodeBorder.x=(_subMenuBorder.visible) ? _nodeBorder.x : menuContainer.subMenuMaskXPos + _menuWidth + 15;
-				_nodeBorder.render(w - (menuContainer.subMenuMaskXPos + _menuWidth + 15) - 30, h - 20);
-				_nodesContainer.border(_nodeBorder.x + 15, 10, _nodeBorder._w - 30, h - 20);
+				_nodeBorder.render(w - (menuContainer.subMenuMaskXPos + _menuWidth + 15) - 30, height - 20);
+				_nodesContainer.border(_nodeBorder.x + 15, 10, _nodeBorder._w - 30, height - 20);
 				_scrollLeft.x=menuContainer.subMenuMaskXPos + _menuWidth - 10;
 			}
 			if (menuContainer.subMenuMaskXPos == _menuWidth - 15)
@@ -425,13 +417,13 @@
 			if (_subMenuBorder.visible)
 			{
 				_subMenuBorder.x=menuContainer.listMaskXPos - 200;
-				_subMenuBorder.render(_nodeBorder.x - _subMenuBorder.x - Migration.GUTTER_WIDTH, h - 20);
+				_subMenuBorder.render(_nodeBorder.x - _subMenuBorder.x - Migration.GUTTER_WIDTH, height - 20);
 			}
 			else
 			{
 				_nodeBorder.x=(_subMenuBorder.visible) ? _nodeBorder.x : menuContainer.subMenuMaskXPos + _menuWidth + 15;
-				_nodeBorder.render(w - (menuContainer.subMenuMaskXPos + _menuWidth + 15) - 30, h - 20);
-				_nodesContainer.border(_nodeBorder.x + 15, 10, _nodeBorder._w - 30, h - 20);
+				_nodeBorder.render(w - (menuContainer.subMenuMaskXPos + _menuWidth + 15) - 30, height - 20);
+				_nodesContainer.border(_nodeBorder.x + 15, 10, _nodeBorder._w - 30, height - 20);
 				_scrollLeft.x=menuContainer.subMenuMaskXPos + _menuWidth - 10;
 			}
 			if (menuContainer.subMenuMaskXPos == menuContainer.mainMaskXPos - _menuWidth)
@@ -447,8 +439,8 @@
 		{
 			menuContainer.mainMaskXPos=(menuContainer.mainMaskXPos < _menuWidth - 30) ? menuContainer.mainMaskXPos * 1.2 + 5 : (_menuWidth - 15);
 			_nodeBorder.x=menuContainer.mainMaskXPos + 15;
-			_nodeBorder.render(w - (menuContainer.mainMaskXPos + 15) - 30, h - 20);
-			_nodesContainer.border(_nodeBorder.x + 15, 10, _nodeBorder._w - 30, h - 20);
+			_nodeBorder.render(w - (menuContainer.mainMaskXPos + 15) - 30, height - 20);
+			_nodesContainer.border(_nodeBorder.x + 15, 10, _nodeBorder._w - 30, height - 20);
 			menuContainer.filterMaskXPos=_nodeBorder.x - menuContainer._mainW;
 			_scrollLeft.x=menuContainer.mainMaskXPos - 10;
 			_nodesContainer._nodeXPos+=5;
@@ -463,8 +455,8 @@
 		{
 			menuContainer.mainMaskXPos=(menuContainer.mainMaskXPos > menuContainer._mainNodeSize / 2 + 10) ? menuContainer.mainMaskXPos * 0.8 - 5 : Math.floor(menuContainer._mainNodeSize / 2);
 			_nodeBorder.x=menuContainer.mainMaskXPos + 15;
-			_nodeBorder.render(w - (menuContainer.mainMaskXPos + 15) - 30, h - 20);
-			_nodesContainer.border(_nodeBorder.x + 15, 10, _nodeBorder._w - 30, h - 20);
+			_nodeBorder.render(w - (menuContainer.mainMaskXPos + 15) - 30, height - 20);
+			_nodesContainer.border(_nodeBorder.x + 15, 10, _nodeBorder._w - 30, height - 20);
 			menuContainer.filterMaskXPos=_nodeBorder.x - menuContainer._mainW;
 			_scrollLeft.x=menuContainer.mainMaskXPos - 10;
 			_nodesContainer._nodeXPos-=5;
@@ -477,15 +469,15 @@
 		private function expandSubMenu(e:Event)
 		{
 			_nodeBorder.x=(_nodeBorder.x < (Migration.GUTTER_WIDTH * 4 + Migration.COLUMN_WIDTH * 2) - 10) ? _nodeBorder.x + 10 : (Migration.GUTTER_WIDTH * 4 + Migration.COLUMN_WIDTH * 2);
-			_nodeBorder.render(w - _nodeBorder.x - 30, h - 20);
-			_nodesContainer.border(_nodeBorder.x + 15, 10, _nodeBorder._w - 30, h - 20);
+			_nodeBorder.render(w - _nodeBorder.x - 30, height - 20);
+			_nodesContainer.border(_nodeBorder.x + 15, 10, _nodeBorder._w - 30, height - 20);
 			menuContainer.listMaskXPos=_nodeBorder.x - Migration.GUTTER_WIDTH - 15; //equal to mainW?
 
 
 			if (_nodeBorder.x > Migration.GUTTER_WIDTH * 2 + Migration.COLUMN_WIDTH)
 			{
 				_subMenuBorder.visible=true;
-				_subMenuBorder.render(_nodeBorder.x - _subMenuBorder.x - Migration.GUTTER_WIDTH, h - 20);
+				_subMenuBorder.render(_nodeBorder.x - _subMenuBorder.x - Migration.GUTTER_WIDTH, height - 20);
 			}
 			_scrollLeft.x=_nodeBorder.x - 25;
 			_nodesContainer._nodeXPos+=10;
@@ -498,14 +490,14 @@
 		private function collapseSubMenu(e:Event)
 		{
 			_nodeBorder.x=(_nodeBorder.x > _menuWidth + 10) ? _nodeBorder.x - 10 : _menuWidth;
-			_nodeBorder.render(w - _nodeBorder.x - 30, h - 20);
-			_nodesContainer.border(_nodeBorder.x + 15, 10, _nodeBorder._w - 30, h - 20);
+			_nodeBorder.render(w - _nodeBorder.x - 30, height - 20);
+			_nodesContainer.border(_nodeBorder.x + 15, 10, _nodeBorder._w - 30, height - 20);
 			menuContainer.listMaskXPos=_nodeBorder.x - Migration.GUTTER_WIDTH - 15;
 
 			if (_nodeBorder.x - Migration.GUTTER_WIDTH > _subMenuBorder.x)
 			{
 
-				_subMenuBorder.render(_nodeBorder.x - _subMenuBorder.x - Migration.GUTTER_WIDTH, h - 20);
+				_subMenuBorder.render(_nodeBorder.x - _subMenuBorder.x - Migration.GUTTER_WIDTH, height - 20);
 			}
 			else
 			{

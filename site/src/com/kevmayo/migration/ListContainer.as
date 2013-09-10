@@ -1,17 +1,17 @@
 ﻿package com.kevmayo.migration{
 
+	import com.kevmayo.migration.events.MenuEvent;
+	import flash.display.*;
+	import flash.display.Graphics;
+	import flash.display.Shape;
+	import flash.display.Sprite;
+	import flash.events.Event;
+	import flash.events.MouseEvent;
+	import flash.geom.Rectangle;
+	import flash.text.Font;
 	import flash.text.TextField;
 	import flash.text.TextFormat;
 	import flash.text.TextFormatAlign;
-	import flash.text.*;
-	import flash.text.Font;
-	import flash.display.Sprite;
-	import flash.events.MouseEvent;
-	import flash.events.*;
-	import flash.display.Graphics;
-	import flash.display.Shape;
-	import flash.geom.Rectangle;
-	import com.kevmayo.migration.events.MenuEvent;
 
 
 	public class ListContainer extends Sprite {
@@ -21,7 +21,7 @@
 		//private var contMask:Sprite = new Sprite();
 
 		private var fieldH:int;
-		private var myFont:Font=new ArialReg  ;
+		private var myFont:Font=new Font(); //new ArialReg  ;
 		private var tIFormat:TextFormat;
 		private var tIIFormat:TextFormat;
 		private var sFormat:TextFormat;
@@ -253,7 +253,7 @@
 			if (e.target.name!="node") {
 				e.target.addEventListener(MouseEvent.MOUSE_OUT,outField);
 				e.target.addEventListener(MouseEvent.CLICK,clickField);
-				fName=e.target.text;
+				//fName=e.target.text;
 				e.target.background=true;
 				e.target.backgroundColor=0xE4EECF;
 				e.target.defaultTextFormat=sFormat;
@@ -301,14 +301,15 @@
 		}
 
 		public function getDir():Array {
-			return list[_i].dir;
+			//wtf?
+			return list;//return list[_i].dir;
 		}
 
 		private function outField(e:MouseEvent) {
 			e.currentTarget.dispatchEvent(new MenuEvent(MenuEvent.OUT_NAME,targetIndex,true,listType));
 			e.target.removeEventListener(MouseEvent.MOUSE_OUT,outField);
 			e.target.background=false;
-			if (cont.getChildIndex(e.target)%2==1) {
+			if (cont.getChildIndex(e.target as DisplayObject)%2==1) {
 				e.target.defaultTextFormat=tIFormat;
 				e.target.setTextFormat(tIFormat);
 			} else {

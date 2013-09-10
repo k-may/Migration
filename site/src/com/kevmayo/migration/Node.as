@@ -26,6 +26,7 @@
 			this.w=_w;
 			this.name="node";
 			this.color = fillColor
+				
 			addChild(shape);
 			render();
 		}
@@ -71,7 +72,7 @@
 					render();
 					break;
 				case "out" :
-					cColor=0xffffff;
+					color=0xffffff;
 					render();
 					break;
 			}
@@ -87,7 +88,7 @@
 		}
 
 		public function get _list():InstObject {
-			trace("NODE: inst name = " + list.name);
+			//trace("NODE: inst name = " + list.name);
 			return list;
 		}
 

@@ -23,7 +23,7 @@
 		private var dField:TextField;
 		private var fName:String;
 		private var fieldH:int;
-		private var myFont:Font = new ArialReg();
+		private var myFont:Font = new Font();//new ArialReg();
 		//var myPosFont:Font = new Font2();
 
 		private var tFormat:TextFormat;
@@ -210,7 +210,7 @@
 
 			posContMaxW = (posContMaxW < posTitleMaxW)?posTitleMaxW:posContMaxW;
 
-			if (directors.length>0) {
+			/*if (directors.length>0) {
 				for (var i:int = 0; i < dCont.getChildAt(1).numChildren; i ++) {
 					dCont.getChildAt(1).getChildAt(i).width=posContMaxW;
 				}
@@ -234,7 +234,7 @@
 				dCont.x=- posContMaxW;
 				fieldTempMask(dCont);
 				addDashedLines(dCont.getChildAt(1),posContMaxW);
-			}
+			}*/
 		}
 
 		private function fieldBackground(_cont:Sprite) {
@@ -494,8 +494,11 @@
 				trajectory.graphics.moveTo(cArray[i].x1 + spacing/2,0);*/
 				var linDir = (cArray[i].x2 - cArray[i].x1)/Math.abs(cArray[i].x2-cArray[i].x1);
 				var contX=cArray[i].x2-Math.pow(i,2)*linDir;
-				var traj:TrajectoryController = new TrajectoryController(contX, dir*(i), cArray[i].x1 + spacing/2,0, cArray[i].x2+ spacing/2, 0,0x000ff0);
-				trajectory.addChild(traj);
+				
+				//todo: why is this broken?
+				
+				//var traj:TrajectoryController = new TrajectoryController(contX, dir*(i), cArray[i].x1 + spacing/2,0, cArray[i].x2+ spacing/2, 0,0x000ff0);
+				//trajectory.addChild(traj);
 			}
 		}
 
