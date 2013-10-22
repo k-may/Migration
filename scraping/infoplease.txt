@@ -1,0 +1,10 @@
+http://www.infoplease.com/ipa/A0001796.html
+
+console.log("<cities>");
+for(var i = 0; i < cL.length; i ++){
+console.log("<city>");
+console.log("<name>" + cL[i].name + "</name>");
+console.log("<longitude>" + cL[i].longitudes.deg.data );// + ", " + cL[i].longitudes.para.data" + </longitude>");
+console.log("</city>");
+}
+console.log("</cities>");

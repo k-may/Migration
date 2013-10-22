@@ -1,0 +1,58 @@
+<cities>
+<city>
+<name>Calgary, Alba., Can.</name>
+<longitude>114, 1</longitude>
+</city>
+<city>
+<name>Edmonton, Alb., Can.</name>
+<longitude>113, 28</longitude>
+</city>
+<city>
+<name>Kingston, Ont., Can.</name>
+<longitude>76, 30</longitude>
+</city>
+<city>
+<name>London, Ont., Can.</name>
+<longitude>81, 34</longitude>
+</city>
+<city>
+<name>Montreal, Que., Can.</name>
+<longitude>73, 35</longitude>
+</city>
+<city>
+<name>Moose Jaw, Sask., Can.</name>
+<longitude>105, 31</longitude>
+</city>
+<city>
+<name>Nelson, B.C., Can.</name>
+<longitude>117, 17</longitude>
+</city>
+<city>
+<name>Ottawa, Ont., Can.</name>
+<longitude>75, 43</longitude>
+</city>
+<city>
+<name>Quebec, Que., Can.</name>
+<longitude>71, 11</longitude>
+</city>
+<city>
+<name>St. John, N.B., Can.</name>
+<longitude>66, 10</longitude>
+</city>
+<city>
+<name>Toronto, Ont., Can.</name>
+<longitude>79, 24</longitude>
+</city>
+<city>
+<name>Vancouver, B.C., Can.</name>
+<longitude>123, 06</longitude>
+</city>
+<city>
+<name>Victoria, B.C., Can.</name>
+<longitude>123, 21</longitude>
+</city>
+<city>
+<name>Winnipeg, Man., Can.</name>
+<longitude>97, 7</longitude>
+</city>
+</cities>
