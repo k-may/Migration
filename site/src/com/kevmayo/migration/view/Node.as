@@ -2,7 +2,8 @@
 {
 	import com.kevmayo.migration.Migration;
 	import com.kevmayo.migration.framework.InstitutionEntry;
-	
+
+	import flash.display.Graphics;
 	import flash.display.Shape;
 	import flash.display.Sprite;
 	import flash.events.Event;
@@ -28,8 +29,8 @@
 			this.hoverColor=_hoverColor;
 
 			this.lineVisible=true;
-			
-			this.buttonMode = true;
+
+			this.buttonMode=true;
 
 			this.lineColor=_lineColor;
 			this.color=fillColor
@@ -39,23 +40,23 @@
 
 			addChild(shape);
 			this.addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
-			
+
 		}
 
-		
+
 		protected function onAddedToStage(event:Event):void
 		{
 			this.removeEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
 			// TODO Auto-generated method stub
 			render();
 		}
-		
+
 		public function get entry():InstitutionEntry
 		{
 			return _entry;
 		}
-		
-		
+
+
 		public function render()
 		{
 			shape.graphics.clear();
@@ -74,6 +75,24 @@
 			shape.graphics.lineTo(width, width / 2);
 			shape.graphics.lineTo(width / 2, 0);
 			shape.graphics.endFill();
+		}
+
+
+		public static function DrawDiamond(g:Graphics, radius:int, color:uint, lineWeight:int=-1)
+		{
+			g.clear();
+			if (lineWeight != -1)
+				g.lineStyle(3, color);
+			else
+				g.beginFill(color);
+			g.moveTo(0, -radius);
+			g.lineTo(radius, 0);
+			g.lineTo(0, radius);
+			g.lineTo(-radius, 0);
+			g.lineTo(0, -radius);
+
+			if (lineWeight == -1)
+				g.endFill();
 		}
 
 		public function hover(h:Boolean)
@@ -111,17 +130,18 @@
 					break;
 			}
 		}
-		
-		override public function set width(value:Number):void{
-			_width = value;
+
+		override public function set width(value:Number):void
+		{
+			_width=value;
 		}
-		
+
 		override public function get width():Number
 		{
 			// TODO Auto Generated method stub
 			return _width;
 		}
-		
+
 
 	}
 }

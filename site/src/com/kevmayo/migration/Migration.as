@@ -16,18 +16,23 @@ package com.kevmayo.migration
 	public class Migration extends Sprite
 	{
 
+		
 		private var _mouseDown:Boolean=false;
 		private var _downPos:Point;
 		private var controller:Controller;
 		private var model:Model;
 		private var container:Container;
 
+		public static const BUTTON_COLOR:uint = 0x808080;
+		public static const LINE_COLOR:uint = 0xcccccc;
 		public static const STAGE_HEIGHT=650;
 		public static const NODES_PADDING_TOP=305;
 		public static const NODE_SIZE:int=15;
 		public static const NODE_LINE_WIDTH=2;
 		public static const NAV_HEIGHT:int=100;
 		public static const MAX_MENU_WIDTH:int=100;
+		public static const MENU_PADDING_TOP = 50;
+		public static const MENU_PADDING_HOR = 50;
 
 		//padding
 		public static var PADDING_TOP:int=10;
@@ -110,25 +115,8 @@ package com.kevmayo.migration
 
 		private function onResize(e:Event)
 		{
-			//container.width=stage.stageWidth
 			container.resize(stage.stageWidth, stage.stageHeight);
 		}
 
-	/*
-	private function renderScreen(e:Event) {
-		e.target.removeEventListener("NODES_COMPLETE", renderScreen);
-		e.stopImmediatePropagation();
-
-		//this is wierd, sharing references?
-		container.nodes=render._nodes;
-		container.positionList=render.getPosListArray();
-		container.instList=render.getInstListArray();
-		container._posCont=render._posContainer;
-		container._instCont=render._instContainer;
-
-		container.render();
-
-		addChild(container);
-	}*/
 	}
 }

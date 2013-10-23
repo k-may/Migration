@@ -3,7 +3,7 @@ package com.kevmayo.migration.view
 	import com.kevmayo.migration.Migration;
 	import com.kevmayo.migration.framework.CityEntry;
 	import com.kevmayo.migration.framework.NavigationNode;
-	
+
 	import flash.display.Graphics;
 	import flash.display.Sprite;
 	import flash.events.Event;
@@ -21,13 +21,11 @@ package com.kevmayo.migration.view
 		private var _startLong:int;
 		private var _endLong:int;
 		private var _padding:int=50;
-		private var _lineColor:uint=0xcccccc;
-		private var _buttonColor:uint=0x808080;
 		private var _width:int;
 		private var _height:int;
 
-		private var _textScrollWidth = 4000;
-		
+		private var _textScrollWidth=4000;
+
 		private var _scrollButton:Sprite;
 		private var _invalidated:Boolean=false;
 
@@ -39,13 +37,13 @@ package com.kevmayo.migration.view
 
 		public function setLocations(entries:Vector.<CityEntry>):void
 		{
-			_nodeFields = new Vector.<TextField>();
+			_nodeFields=new Vector.<TextField>();
 			_nodes=new Vector.<NavigationNode>();
 			var node:NavigationNode;
 			var pos:Number;
 			var longitude:Number;
 			var textField:TextField;
-			
+
 			for each (var entry:CityEntry in entries)
 			{
 				longitude=entry.longitude;
@@ -53,18 +51,18 @@ package com.kevmayo.migration.view
 				var end:Number=Migration.End_Long;
 				pos=1 - (longitude - start) / (end - start);
 				node=new NavigationNode(entry, pos);
-				node.textPos = _textScrollWidth * node.ratio;
-				
-				textField = new TextField();
-				textField.text = node.entry.name.toUpperCase();
-				textField.autoSize = TextFieldAutoSize.LEFT;
-				textField.embedFonts = true;
+				node.textPos=_textScrollWidth * node.ratio;
+
+				textField=new TextField();
+				textField.text=node.entry.name.toUpperCase();
+				textField.autoSize=TextFieldAutoSize.LEFT;
+				textField.embedFonts=true;
 				addChild(textField);
-				textField.setTextFormat(new TextFormat(new ArialReg().fontName, 16, _lineColor));
-				
-				textField.x = node.textPos - textField.textWidth;
-				
-				node.field = textField;
+				textField.setTextFormat(new TextFormat(new ArialReg().fontName, 16, Migration.LINE_COLOR));
+
+				textField.x=node.textPos - textField.textWidth;
+
+				node.field=textField;
 				node.point=new Sprite();
 				addChild(node.point);
 
@@ -88,7 +86,7 @@ package com.kevmayo.migration.view
 			if (_scrollButton == null)
 			{
 				_scrollButton=new Sprite();
-				drawButton(_scrollButton.graphics, 7);
+				Node.DrawDiamond(_scrollButton.graphics, 7, Migration.BUTTON_COLOR, 3); //drawButton(_scrollButton.graphics, 7);
 				addChild(_scrollButton);
 				_scrollButton.y=_padding;
 			}
@@ -103,7 +101,7 @@ package com.kevmayo.migration.view
 
 				var g:Graphics=this.graphics;
 				g.clear();
-				g.lineStyle(1, _lineColor);
+				g.lineStyle(1, Migration.LINE_COLOR);
 				g.drawRect(0, 0, _width, _height);
 
 				//draw line
@@ -116,10 +114,10 @@ package com.kevmayo.migration.view
 				var point:Sprite;
 				for each (var node:NavigationNode in _nodes)
 				{
-					point = node.point;
-					drawPoint(point.graphics, 5);
-					node.nodePos = node.ratio * getLineWidth();
-					node.textPos = node.ratio * _textScrollWidth;
+					point=node.point;
+					Node.DrawDiamond(point.graphics, 5, Migration.LINE_COLOR); //drawPoint(point.graphics, 5);
+					node.nodePos=node.ratio * getLineWidth();
+					node.textPos=node.ratio * _textScrollWidth;
 					point.x=node.ratio * getLineWidth() + _padding;
 					point.y=_padding;
 				}
@@ -127,10 +125,10 @@ package com.kevmayo.migration.view
 			}
 		}
 
-		private function drawButton(g:Graphics, radius:int)
+		/*private function drawButton(g:Graphics, radius:int)
 		{
 			g.clear();
-			g.lineStyle(3, _buttonColor);
+			g.lineStyle(3, Migration.BUTTON_COLOR);
 			g.moveTo(0, -radius);
 			g.lineTo(radius, 0);
 			g.lineTo(0, radius);
@@ -142,7 +140,7 @@ package com.kevmayo.migration.view
 		private function drawPoint(g:Graphics, radius:int)
 		{
 			g.clear();
-			g.beginFill(_lineColor);
+			g.beginFill(Migration.LINE_COLOR);
 			g.moveTo(0, -radius);
 			g.lineTo(radius, 0);
 			g.lineTo(0, radius);
@@ -150,7 +148,7 @@ package com.kevmayo.migration.view
 			g.lineTo(0, -radius);
 			g.endFill();
 
-		}
+		}*/
 
 		private function clearPoints()
 		{
@@ -169,21 +167,22 @@ package com.kevmayo.migration.view
 		public function setPos(ratio:Number)
 		{
 			_scrollButton.x=getLineWidth() * ratio;
-			
+
 			//var _textPos:Number = _textScrollWidth*ratio;
-			
-			var _textPos:Number = _width/2 - _textScrollWidth*ratio;
-			
+
+			var _textPos:Number=_width / 2 - _textScrollWidth * ratio;
+
 			var textField:TextField;
-			
-			for each(var node:NavigationNode in _nodes){
-				textField = node.field;
-				textField.x = _textPos + node.textPos;
-				
-				if(textField.x > _padding && textField.x + textField.width < _padding + getLineWidth())
-					textField.visible = true;
+
+			for each (var node:NavigationNode in _nodes)
+			{
+				textField=node.field;
+				textField.x=_textPos + node.textPos;
+
+				if (textField.x > _padding && textField.x + textField.width < _padding + getLineWidth())
+					textField.visible=true;
 				else
-					textField.visible = false;
+					textField.visible=false;
 			}
 		}
 	}
