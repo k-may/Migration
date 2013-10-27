@@ -9,6 +9,8 @@ package com.kevmayo.migration.framework
 		private var _endTime:int;
 		private var _endDate:String;
 		private var _type:PositionType;
+		private var _color:uint;
+		private var _numPositions:int;
 		/**
 		 * Class defines position entry for either curator or director
 		 *  
@@ -32,6 +34,13 @@ package com.kevmayo.migration.framework
 				_endTime = int.MAX_VALUE;
 			
 			_type = type;
+			
+			_color = Math.random() * 0xffffff;
+		}
+
+		public function get color():uint
+		{
+			return _color;
 		}
 
 		public function get endTime():int

@@ -1,6 +1,8 @@
 ﻿package com.kevmayo.migration.view{
-	import com.kevmayo.migration.framework.InstitutionEntry;
+	import com.kevmayo.migration.framework.INode;
 	import com.kevmayo.migration.framework.INodeFactory;
+	import com.kevmayo.migration.framework.InstitutionEntry;
+	import com.kevmayo.migration.framework.Node;
 
 	public class NodeFactory implements INodeFactory {
 
@@ -13,10 +15,10 @@
 			
 		}
 		
-		public function createNodes(institutions:Vector.<InstitutionEntry>):Array {
+		public function createNodes(institutions:Vector.<InstitutionEntry>):Vector.<Node> {
 			var fillColor:int;
 			var node:Node;
-			var nodeArray:Array = new Array(institutions.length);
+			var nodeVector:Vector.<Node> = new Vector.<Node>(); // = new Array(institutions.length);
 			 
 			//alternate fill color every 5th node for visual clarity
 			for (var i:uint =0; i < institutions.length; i ++) {
@@ -26,9 +28,9 @@
 					fillColor=_fillColor;
 				}
 				node=new Node(fillColor,_hoverColor,_lineColor, institutions[i]);
-				nodeArray.push(node);
+				nodeVector.push(node);
 			}
-			return nodeArray;
+			return nodeVector;
 		}
 
 	}

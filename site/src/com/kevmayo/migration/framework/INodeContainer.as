@@ -6,5 +6,6 @@ package com.kevmayo.migration.framework
 	{
 		function showNode(text:String, x:int, y:int);
 		function findNodesByPosition(entry:PositionEntry):Array;
+		function findNodeByInstitution(entry:InstitutionEntry):Node;
 	}
 }

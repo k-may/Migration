@@ -1,8 +1,7 @@
-﻿package com.kevmayo.migration.view
+﻿package com.kevmayo.migration.framework
 {
 	import com.kevmayo.migration.Migration;
-	import com.kevmayo.migration.framework.InstitutionEntry;
-
+	
 	import flash.display.Graphics;
 	import flash.display.Shape;
 	import flash.display.Sprite;
@@ -10,7 +9,7 @@
 
 	public class Node extends Sprite
 	{
-		private var shape:Shape=new Shape();
+		private var shape:Shape;
 
 		private var _entry:InstitutionEntry;
 
@@ -21,6 +20,7 @@
 		private const lineWeight:int=2
 		public var lineVisible:Boolean;
 		private var _width:int;
+		private var _rotation:int;
 
 		public function Node(_fillColor, _hoverColor:int, _lineColor:uint, data:InstitutionEntry)
 		{
@@ -38,7 +38,6 @@
 			this.width=15;
 			_entry=data;
 
-			addChild(shape);
 			this.addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
 
 		}
@@ -48,6 +47,11 @@
 		{
 			this.removeEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
 			// TODO Auto-generated method stub
+
+			shape=new Shape();
+			addChild(shape);
+			shape.rotation = _rotation;
+
 			render();
 		}
 
@@ -56,25 +60,11 @@
 			return _entry;
 		}
 
+		
 
 		public function render()
 		{
-			shape.graphics.clear();
-			if (lineVisible)
-			{
-				shape.graphics.lineStyle(Migration.NODE_LINE_WIDTH, lineColor);
-				shape.graphics.beginFill(0xffffff);
-			}
-			else
-			{
-				shape.graphics.beginFill(color);
-			}
-			shape.graphics.moveTo(width / 2, 0);
-			shape.graphics.lineTo(0, width / 2);
-			shape.graphics.lineTo(width / 2, width);
-			shape.graphics.lineTo(width, width / 2);
-			shape.graphics.lineTo(width / 2, 0);
-			shape.graphics.endFill();
+			DrawDiamond(shape.graphics, width / 2, 0x000);
 		}
 
 
@@ -82,7 +72,7 @@
 		{
 			g.clear();
 			if (lineWeight != -1)
-				g.lineStyle(3, color);
+				g.lineStyle(lineWeight, color);
 			else
 				g.beginFill(color);
 			g.moveTo(0, -radius);
@@ -142,6 +132,14 @@
 			return _width;
 		}
 
+
+		public function setRotation(angle:int):void
+		{
+			_rotation=angle;
+			// TODO Auto Generated method stub
+			if (shape != null)
+				shape.rotation=angle;
+		}
 
 	}
 }

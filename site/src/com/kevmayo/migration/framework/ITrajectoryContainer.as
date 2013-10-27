@@ -4,7 +4,7 @@ package com.kevmayo.migration.framework
 
 	public interface ITrajectoryContainer
 	{
-		function addTrajectory(start:Point, end:Point):void;
+		function addTrajectory(start:Point, end:Point, color:uint = 0xfff):void;
 		function clear():void;
 	}
 }

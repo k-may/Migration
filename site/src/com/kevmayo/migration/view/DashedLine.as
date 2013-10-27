@@ -360,7 +360,7 @@ package com.kevmayo.migration.view{
 			var dy=ey-sy;
 			return Math.sqrt(dx*dx + dy*dy);
 		}
-		private function curveLength(sx:Number, sy:Number, cx:Number, cy:Number, ex:Number, ey:Number, accuracy:Number = null):Number {
+		private function curveLength(sx:Number, sy:Number, cx:Number, cy:Number, ex:Number, ey:Number, accuracy:Number = 0):Number {
 			var total:Number=0;
 			var tx:Number=sx;
 			var ty:Number=sy;

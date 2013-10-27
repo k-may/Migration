@@ -29,9 +29,9 @@
 			//init
 		}
 
-		public function addTrajectory(start:Point, end:Point):void
+		public function addTrajectory(start:Point, end:Point, color:uint = 0x0000):void
 		{
-			var traj:Trajectory=new Trajectory(new Point(0, start.y), new Point(end.x - start.x, start.y));
+			var traj:Trajectory=new Trajectory(new Point(0, start.y), new Point(end.x - start.x, start.y), color);
 			addChild(traj);
 			traj.x = start.x;
 			_trajectories.push(traj);

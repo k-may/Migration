@@ -2,6 +2,7 @@ package com.kevmayo.migration
 {
 	import com.kevmayo.migration.view.Container;
 	import com.kevmayo.migration.view.NodeFactory;
+	import com.kevmayo.migration.view.Preloader;
 	import com.kevmayo.migration.view.TrajectoryContainer;
 	
 	import flash.display.MovieClip;
@@ -15,24 +16,28 @@ package com.kevmayo.migration
 
 	public class Migration extends Sprite
 	{
-
 		
 		private var _mouseDown:Boolean=false;
 		private var _downPos:Point;
 		private var controller:Controller;
 		private var model:Model;
 		private var container:Container;
+		private var preloader:Preloader;
 
 		public static const BUTTON_COLOR:uint = 0x808080;
 		public static const LINE_COLOR:uint = 0xcccccc;
+		public static const TITLE_COLOR:uint = 0X4D4D4D;
+		
 		public static const STAGE_HEIGHT=650;
 		public static const NODES_PADDING_TOP=305;
 		public static const NODE_SIZE:int=15;
 		public static const NODE_LINE_WIDTH=2;
 		public static const NAV_HEIGHT:int=100;
-		public static const MAX_MENU_WIDTH:int=100;
-		public static const MENU_PADDING_TOP = 50;
+		public static const MAX_MENU_WIDTH:int=350;
+		public static const MENU_PADDING_TOP = 70;
 		public static const MENU_PADDING_HOR = 50;
+		public static const CONT_PADDING_TOP = 55;
+		public static const CONT_PADDING_RIGHT = 20;
 
 		//padding
 		public static var PADDING_TOP:int=10;
@@ -40,7 +45,7 @@ package com.kevmayo.migration
 		public static var GUTTER_WIDTH:int=40;
 		public static var COLUMN_WIDTH:int=135;
 		public static var MAIN_NODE_SIZE:int=25;
-		
+		public static var BORDER_RADIUS:int = 25;
 		public static var Start_Long:Number;
 		public static var End_Long:Number;
 
@@ -60,7 +65,12 @@ package com.kevmayo.migration
 		{
 
 			model=new Model(dataLoaded);
-			controller=new Controller();
+			controller=new Controller(model);
+			
+			preloader = new Preloader();
+			addChild(preloader);
+			preloader.width= stage.stageWidth;
+			preloader.height = stage.stageHeight;
 
 			addEventListener(Event.ENTER_FRAME, onEnterFrame);
 
@@ -81,15 +91,11 @@ package com.kevmayo.migration
 			
 			trace("start long : " + Start_Long + " / end : " + End_Long);
 			
-			container=new Container(model);
+			container=new Container(model, controller);
 			container.registerNodeFactory(new NodeFactory());
-			container.addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
-			addChild(container);
 
-			controller.registerNodeContainer(container.nodesContainer);
-			controller.registerTrajectoryContainer(container.trajectoryContainer);
-			controller.registerDetailsContainer(container.detailsContainer);
-
+			removeChild(preloader);
+			
 			stage.dispatchEvent(new Event(Event.RESIZE));
 		}
 
@@ -116,6 +122,10 @@ package com.kevmayo.migration
 		private function onResize(e:Event)
 		{
 			container.resize(stage.stageWidth, stage.stageHeight);
+			
+			if(!container.stage)
+				addChild(container);
+
 		}
 
 	}

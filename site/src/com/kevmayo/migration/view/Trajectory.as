@@ -18,10 +18,12 @@
 		
 		private var _startPoint:Point;
 		private var _endPoint:Point;
+		private var _color:uint;
 		
-		public function Trajectory(startPoint:Point, endPoint:Point){
+		public function Trajectory(startPoint:Point, endPoint:Point, color:uint){
 			_startPoint = startPoint;
 			_endPoint = endPoint;
+			_color = color;
 			
 			render();
 		}
@@ -39,9 +41,10 @@
 		
 		public function render() {
 			this.graphics.clear();
-			this.graphics.lineStyle(1,0x000);
+			this.graphics.lineStyle(1,_color);
 			this.graphics.moveTo(_startPoint.x,_startPoint.y);
-			this.graphics.curveTo((_endPoint.x - _startPoint.x)/2, 200, _endPoint.x, _endPoint.y);
+			trace("render : " + _endPoint.x + " / " + _startPoint.x);
+			this.graphics.curveTo((_endPoint.x - _startPoint.x)*0.9, 200, _endPoint.x, _endPoint.y);
 		}
 	
 /*

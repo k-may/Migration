@@ -4,6 +4,7 @@
 	public class InstitutionEntry
 	{
 
+		private var _color:uint;
 		private var _name:String;
 		private var _longitude:Number;
 		private var _nodeIndex:int;
@@ -32,8 +33,23 @@
 			_endDate=endDate;
 			_longitude=longitude;
 			_nodeIndex=nodeIndex
+			_color=Math.random() * 0xffffff;
 		}
 
+		public function get endDate():String
+		{
+			return _endDate;
+		}
+
+		public function get startDate():String
+		{
+			return _startDate;
+		}
+
+		public function get color():uint
+		{
+			return _color;
+		}
 
 		public function getPositionByName(name:String):PositionEntry
 		{

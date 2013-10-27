@@ -1,9 +1,12 @@
 package com.kevmayo.migration.view
 {
 	import com.kevmayo.migration.Migration;
+	import com.kevmayo.migration.Model;
 	import com.kevmayo.migration.framework.CityEntry;
+	import com.kevmayo.migration.framework.InstitutionEntry;
 	import com.kevmayo.migration.framework.NavigationNode;
-
+	import com.kevmayo.migration.framework.Node;
+	
 	import flash.display.Graphics;
 	import flash.display.Sprite;
 	import flash.events.Event;
@@ -21,17 +24,28 @@ package com.kevmayo.migration.view
 		private var _startLong:int;
 		private var _endLong:int;
 		private var _padding:int=50;
+		private var _textPaddingTop:int=10;
 		private var _width:int;
 		private var _height:int;
+		private var _currentRatio:Number;
 
-		private var _textScrollWidth=4000;
+		private var _textScrollWidth=40000;
+
+		private var _overFormat:TextFormat;
+		private var _outFormat:TextFormat;
 
 		private var _scrollButton:Sprite;
 		private var _invalidated:Boolean=false;
 
-		public function NavigationContainer()
+		private var _model:Model;
+		private var _nodeContainer:NodeContainer;
+
+		public function NavigationContainer(model:Model, nodeCont:NodeContainer)
 		{
 			super();
+			_model=model;
+			_nodeContainer = nodeCont;
+			
 			addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
 		}
 
@@ -49,18 +63,17 @@ package com.kevmayo.migration.view
 				longitude=entry.longitude;
 				var start:Number=Migration.Start_Long
 				var end:Number=Migration.End_Long;
-				pos=1 - (longitude - start) / (end - start);
+				pos=getNodePosForLongitude(longitude); //1 - (longitude - start) / (end - start);
+				
+				trace("city : " + entry.name + " / " + pos);
 				node=new NavigationNode(entry, pos);
-				node.textPos=_textScrollWidth * node.ratio;
 
 				textField=new TextField();
 				textField.text=node.entry.name.toUpperCase();
 				textField.autoSize=TextFieldAutoSize.LEFT;
 				textField.embedFonts=true;
 				addChild(textField);
-				textField.setTextFormat(new TextFormat(new ArialReg().fontName, 16, Migration.LINE_COLOR));
-
-				textField.x=node.textPos - textField.textWidth;
+				textField.y=_textPaddingTop;
 
 				node.field=textField;
 				node.point=new Sprite();
@@ -70,6 +83,11 @@ package com.kevmayo.migration.view
 				_nodes.push(node);
 
 			}
+		}
+		
+		private function getNodePosForLongitude(value:Number):Number{
+			var pos:Number = _model.getLocalEntryForLongitude(value);
+			return pos;
 		}
 
 		public override function set width(value:Number):void
@@ -91,6 +109,9 @@ package com.kevmayo.migration.view
 				_scrollButton.y=_padding;
 			}
 			_invalidated=true;
+
+			_outFormat=new TextFormat(new ArialReg().fontName, 16, Migration.LINE_COLOR);
+			_overFormat=new TextFormat(new ArialReg().fontName, 16, Migration.BUTTON_COLOR);
 		}
 
 		public function update()
@@ -102,7 +123,7 @@ package com.kevmayo.migration.view
 				var g:Graphics=this.graphics;
 				g.clear();
 				g.lineStyle(1, Migration.LINE_COLOR);
-				g.drawRect(0, 0, _width, _height);
+				//g.drawRect(0, 0, _width, _height);
 
 				//draw line
 				g.moveTo(_padding, _padding);
@@ -122,40 +143,15 @@ package com.kevmayo.migration.view
 					point.y=_padding;
 				}
 
+				setPos(_currentRatio);
 			}
 		}
-
-		/*private function drawButton(g:Graphics, radius:int)
-		{
-			g.clear();
-			g.lineStyle(3, Migration.BUTTON_COLOR);
-			g.moveTo(0, -radius);
-			g.lineTo(radius, 0);
-			g.lineTo(0, radius);
-			g.lineTo(-radius, 0);
-			g.lineTo(0, -radius);
-			g.endFill();
-		}
-
-		private function drawPoint(g:Graphics, radius:int)
-		{
-			g.clear();
-			g.beginFill(Migration.LINE_COLOR);
-			g.moveTo(0, -radius);
-			g.lineTo(radius, 0);
-			g.lineTo(0, radius);
-			g.lineTo(-radius, 0);
-			g.lineTo(0, -radius);
-			g.endFill();
-
-		}*/
 
 		private function clearPoints()
 		{
 			for each (var point:Sprite in _points)
-			{
 				removeChild(point);
-			}
+
 			_points=new Vector.<Sprite>();
 		}
 
@@ -166,23 +162,42 @@ package com.kevmayo.migration.view
 
 		public function setPos(ratio:Number)
 		{
-			_scrollButton.x=getLineWidth() * ratio;
+			_currentRatio=ratio;
 
-			//var _textPos:Number = _textScrollWidth*ratio;
+			_scrollButton.x=getLineWidth() * ratio + _padding;
 
-			var _textPos:Number=_width / 2 - _textScrollWidth * ratio;
+			var textScrollPosition=_textScrollWidth * ratio;
+			var textScrollOffset:Number=_width / 2 - _textScrollWidth * ratio;
 
 			var textField:TextField;
 
 			for each (var node:NavigationNode in _nodes)
 			{
 				textField=node.field;
-				textField.x=_textPos + node.textPos;
+				textField.x=textScrollOffset + node.textPos - textField.width / 2;
 
 				if (textField.x > _padding && textField.x + textField.width < _padding + getLineWidth())
+				{
 					textField.visible=true;
+
+					if (node.ratio < ratio + 0.02 && node.ratio > ratio - 0.02)
+					{
+						textField.setTextFormat(_overFormat);
+						Node.DrawDiamond(node.point.graphics, 5, Migration.BUTTON_COLOR); //drawPoint(point.graphics, 5);node.point.
+					}
+					else
+					{
+						textField.setTextFormat(_outFormat);
+						Node.DrawDiamond(node.point.graphics, 5, Migration.LINE_COLOR);
+					}
+
+				}
 				else
+				{
 					textField.visible=false;
+					textField.setTextFormat(_outFormat);
+					Node.DrawDiamond(node.point.graphics, 5, Migration.LINE_COLOR);
+				}
 			}
 		}
 	}

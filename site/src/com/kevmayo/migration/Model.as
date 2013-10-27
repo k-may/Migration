@@ -4,7 +4,7 @@
 	import com.kevmayo.migration.framework.InstitutionEntry;
 	import com.kevmayo.migration.framework.PositionEntry;
 	import com.kevmayo.migration.framework.PositionType;
-	
+
 	import flash.utils.Dictionary;
 
 	public class Model
@@ -18,6 +18,8 @@
 		public var startLong:Number;
 		public var endLong:Number;
 
+		private var _positions:Vector.<PositionEntry>;
+
 		public function Model(callBack:Function)
 		{
 			trace("hello from model");
@@ -29,8 +31,8 @@
 
 		public function init()
 		{
-			new XMLLoader("../cities.xml", parceCities);
-			new XMLLoader("../instList.xml", parceInstitutionData);
+			new XMLLoader("../data/cities.xml", parceCities);
+			new XMLLoader("../data/instList.xml", parceInstitutionData);
 			//new XMLLoader("../posList.xml", parsePositionsData);
 		}
 
@@ -46,7 +48,7 @@
 			{
 				city=new CityEntry();
 				var xml=list.city[i];
-				var name = xml.name;
+				var name=xml.name;
 				city.name=name.split("., Can")[0];
 				longitude=parseLongitude(xml.longitude);
 				updateStartEndLongitude(longitude);
@@ -79,6 +81,7 @@
 			var nodeCount:int=list.institutions.length();
 			_institutions=new Vector.<InstitutionEntry>();
 			_latitudeMap=new Dictionary();
+			_positions=new Vector.<PositionEntry>();
 
 			var institutionEntry:InstitutionEntry;
 			var positionEntry:PositionEntry;
@@ -100,8 +103,13 @@
 				_latitudeMap[Number(listXML.inst_lat)]=institutionEntry;
 
 				positions=new Vector.<PositionEntry>();
+				var pos:PositionEntry;
 				for (var j:int=0; j < posNum; j++)
-					positions.push(parsePosition(listXML.positions.position[j]));
+				{
+					pos=parsePosition(listXML.positions.position[j]);
+					if (pos != null)
+						positions.push(pos);
+				}
 
 				institutionEntry.positions=positions;
 
@@ -126,11 +134,33 @@
 		{
 			var firstName:String=node.first_name;
 			var lastName:String=node.last_name;
+			if (firstName == "" || lastName == "")
+				return null;
+
+			var name=lastName + ", " + firstName;
 			var type:PositionType=parsePositionType(node);
 			var startDate:String=node.start_date;
 			var endDate:String=node.end_date;
-			var posEntry:PositionEntry=new PositionEntry(lastName + ", " + firstName, startDate, endDate, type);
+			var posEntry:PositionEntry=new PositionEntry(name, startDate, endDate, type);
+
+			addPosition(posEntry);
+
 			return posEntry;
+		}
+
+		private function addPosition(posEntry:PositionEntry)
+		{
+			var contains:Boolean=false;
+			for each (var pos:PositionEntry in _positions)
+			{
+				if (pos.name == posEntry.name)
+				{
+					contains=true;
+					break;
+				}
+			}
+			if (!contains)
+				_positions.push(posEntry);
 		}
 
 		private function parsePositionType(node:XML):PositionType
@@ -144,11 +174,82 @@
 			return _institutions;
 		}
 
-		
+
 		public function get cities():Vector.<CityEntry>
 		{
 			return _cities;
 		}
 
+		public function getInstitutionNames():Array
+		{
+			var instNames:Array=new Array();
+			for each (var inst:InstitutionEntry in _institutions)
+			{
+				instNames.push({text: inst.name, color: inst.color});
+			}
+			instNames.sortOn("text");
+			return instNames;
+		}
+
+		public function getPositionNames():Array
+		{
+			var posNames:Array=new Array();
+			for each (var posEntry:PositionEntry in _positions)
+			{
+				posNames.push({text: posEntry.name, color: posEntry.color});
+			}
+			posNames.sortOn("text");
+			return posNames;
+
+		}
+
+		public function getPositionByName(name:String):PositionEntry
+		{
+			for each (var pos:PositionEntry in _positions)
+			{
+				if (pos.name == name)
+					return pos;
+			}
+			return null;
+		}
+
+		public function getInstitutionByName(name:String):InstitutionEntry
+		{
+			for each (var inst:InstitutionEntry in _institutions)
+			{
+				if (inst.name == name)
+					return inst;
+			}
+			return null;
+		}
+
+		public function getLocalEntryForLongitude(value:Number):Number
+		{
+			var minDiff:Number=Number.MAX_VALUE;
+			var diff:Number;
+			var index:int=-1;
+			var inst:InstitutionEntry;
+			for (var i:int=0; i < _institutions.length; i++)
+			{
+				inst=_institutions[i];
+				diff=Math.abs(value - inst.latitude)
+				if (diff < minDiff)
+				{
+					index=i;
+					minDiff=diff;
+				}
+			}
+
+			if (index != -1)
+			{
+				var nI:int=_institutions[index].nodeIndex;
+				var l:int=_institutions.length;
+				trace("nI : " + nI + " / " + l);
+				return nI / l;
+
+			}
+
+			return 0;
+		}
 	}
 }

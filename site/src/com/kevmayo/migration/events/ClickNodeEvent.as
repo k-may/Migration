@@ -1,6 +1,6 @@
 package com.kevmayo.migration.events
 {
-	import com.kevmayo.migration.view.Node;
+	import com.kevmayo.migration.framework.Node;
 	
 	import flash.events.Event;
 	
