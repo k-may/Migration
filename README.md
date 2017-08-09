@@ -1,6 +1,8 @@
 # Migration
 
-Actionscript application, presenting the migration patterns of art curators and museum directors across Canada.
+Web and installation project, presenting the migration patterns of art curators and museum directors across Canada. 
+
+Role : Build / Design
 
 Created with artist Dax Morrison, project served as supplimental material for installation.
 
